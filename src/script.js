@@ -1,66 +1,23 @@
-const data = fetch("https://jsonplaceholder.typicode.com/posts")
-  .then((response) => response.json())
-  .then((data) => {
-    // Call a function to display the data
-    displayPosts(data);
-  })
-  .catch((error) => console.error("Error fetching data:", error));
+const input=document.querySelector(".bd-date");
+console.log(input);
+const API_KEY="x9bkcTb2ygtXzfNzGY325Kcg2rKP4Po5LpoJ9RMu";
 
-// Function to display posts
-function displayPosts(posts) {
-  const container = document.querySelector(".post-container");
+input.addEventListener("change",(event) => 
+getAPOD((event.target.value)))
 
-  posts.forEach((post) => {
-    const postElement = document.createElement("div");
-    postElement.classList.add("post");
-    postElement.classList.add("bg-black");
-    postElement.classList.add("text-white");
-    postElement.classList.add("shadow-md");
-    postElement.classList.add("rounded-xl");
-    postElement.classList.add("max-w-5xl");
-    postElement.classList.add("mx-auto");
-
-
-    const postId = document.createElement("h2");
-    postId.textContent = `Post ID: ${post.id}`;
-
-    const postTitle = document.createElement("p");
-    postTitle.textContent = `Title: ${post.title}`;
-
-    postElement.appendChild(postId);
-    postElement.appendChild(postTitle);
-
-    container.appendChild(postElement);
-  });
+const getAPOD = (date) => {
+    const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${date}`
+fetch(url).then((res) => res.json())
+.then((data)=> displayAPOD(data)
+)
 }
 
-//mouseover listener
-document.addEventListener("mouseover", (e) => {
-    console.log(e)
-});
+const displayAPOD = (data) => {
+    const apodCard=document.querySelector(".APOD");
 
-//keypress listener
-document.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    console.log("Enter pressed");
-  } else if (e.key === "a") {
-    alert("A pressed");
-  }
-});
-
-
-const form = document.getElementById("myForm");
-const username = document.getElementById("username");
-const message = document.getElementById("message");
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault(); // Prevent form from submitting
-
-  if (username.value.trim() === "") {
-    message.textContent = "Username cannot be empty.";
-    message.style.color = "red";
-  } else {
-    message.textContent = `Welcome, ${username.value}!`;
-    message.style.color = "green";
-  }
-});
+    console.log(apodCard)
+    apodCard.innerHTML = `
+    <h2 class="apod-title">${data.title} </h2>
+    <img src=${data.url} class="apod-pic">
+    `;
+};
